@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+      integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/style/index.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="model-edit">
+      <div class="edit">
+        <div class="upload flex">
+          <input class="js-upload" type="file" />
+          <button class="js-upload-btn">Submit</button>
+        </div>
+      </div>
+    </div>
+    <section class="verify flex">
+      <div class="login flex">
+        <input id="Email" type="email" name="email" placeholder="Email" />
+        <button class="v">Verify</button>
+      </div>
+    </section>
+    <section class="box container flex">
+      <div class="chatbox flex">
+        <div class="l-sideNav">
+          <div class="logo">
+            <img src="./assest/Chat_Logo.png" alt="Logo" width="90%" />
+          </div>
+          <ul class="menu">
+            <li>
+              <a href="#"><i class="fa-solid fa-user"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-cog"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="main flex">
+          <div class="members flex">
+            <div class="search flex">
+              <div class="search-icon">
+                <i class="fa fa-search"></i>
+              </div>
+              <input
+                class="search-input"
+                type="text"
+                name="member"
+                placeholder="Search"
+              />
+            </div>
+            <div class="member-list flex">
+              <!-- <div class="p">
+                <div class="p-pic">
+                  <img src="./assest/p1.jpeg" alt="" />
+                </div>
+                <div class="p-name">John Doe <div class="status-online"></div></div>
+                <div class="p-status">
+                   <p class="unread">2</p>
+                </div>
+               
+              </div> -->
+              <!-- <div class="p">
+                <div class="p-pic">
+                  <img src="./assest/p2.jpg" alt="" />
+                </div>
+                <div class="p-name">Jane Smith</div>
+                <div class="p-status">
+                  <div class="status-offline"></div>
+                  Offline
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="chat">
+            <div class="chat-cover">
+              <i class="fa-regular fa-comment"></i>
+            </div>
+            <div class="chat-content flex">
+              <div class="chat-top-nav flex">
+                <div class="chat-name"><p id="c-name"></p></div>
+                <div class="chat-status">
+                  <ul class="flex">
+                    <li><a href=""></a></li>
+                    <li>
+                      <a href=""
+                        ><i class="fa fa-phone" aria-hidden="true"></i
+                      ></a>
+                    </li>
+                    <li>
+                      <a href=""
+                        ><i class="fa fa-ellipsis-v" aria-hidden="true"></i
+                      ></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="chat-c">
+                <div class="spacer"></div>
+                <!-- <div>
+                  <div class="c-user flex">
+                    <div class="c-user-text">I am fine.</div>
+                    <div class="c-pic">
+                      <img src="./assest/p2.jpg" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="bubble">
+                  <div class="c-nonuser flex">
+                    <div class="c-pic">
+                      <img src="./assest/p1.jpeg" alt="" />
+                    </div>
+                    <div class="c-user-text">Hello, how are you?</div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <div class="chat-util flex">
+              <div class="chat-func">
+                <textarea
+                  class="chat-input"
+                  type="text"
+                  name="message"
+                  placeholder="Type a message"
+                ></textarea>
+                <button class="btn">
+                  <i class="fa fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="r-sideNav">
+          <div class="s-profile">
+            <div class="profile-pic">
+              <div class="p-edit"><i class="fa-solid fa-pen"></i></div>
+            </div>
+            <div class="profile-name">John Doe</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="/js/index.js"></script>
+  </body>
+</html>
