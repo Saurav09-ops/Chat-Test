@@ -7,6 +7,8 @@ import { WebSocketServer } from "ws";
 import env from "dotenv";
 import { error } from "node:console";
 import http from "http";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 
 env.config();
 
@@ -46,6 +48,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, //max 10MB
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith("image/")) {
+      cb(new Error("Ivalid file type"));
+    } else {
+      cb(null, true);
+    }
+  },
+});
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDNAIRY_NAME,
+  api_key: process.env.CLOUDNAIRY_API_KEY,
+  api_secret: process.env.CLOUDNAIRY_API_SECRET,
+});
 
 app.get("/", async (req, res) => {
   res.sendFile(`${__dirname}/public/index.html`);
@@ -170,7 +190,7 @@ app.get("/status", async (req, res) => {
     let result = await db.query("SELECT * from users ORDER BY id ASC");
     let posts = result.rows;
     // console.log(wsClients);
-
+    console.log(posts[0]);
     posts.forEach((post) => {
       const exists = wsClients.some(
         (client) => Number(client.userId) === Number(post.id),
@@ -181,12 +201,13 @@ app.get("/status", async (req, res) => {
       exists ? (availability = "Online") : (availability = "Offline");
 
       console.log(`user ${post.id}: ${availability}`);
-
+      console.log(post.profile_pic_url);
       status.push({
         userId: post.id,
         first_name: post.first_name,
         last_name: post.last_name,
         email: post.email,
+        url: post.profile_pic_url,
         status: availability,
       });
     });
@@ -259,4 +280,64 @@ ORDER BY sender_id;`,
 
 server.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
+});
+
+app.post("/image", upload.single("file"), async (req, res) => {
+  let url;
+  let public_id;
+  const id = req.body.id;
+  console.log(id);
+
+  // const stream = cloudinary.uploader.upload_stream(
+  //   { folder: "test" },
+  //   (error, result) => {
+  //     try {
+  //       if (error) throw error;
+  //       res.json({ message: "upload sucess" });
+  //       url=result.secure_url;
+  //     } catch (err) {
+  //       console.log(err);
+  //       return res.status(500).json({ error: err.message });
+  //     }
+  //   }
+  // );
+
+  // stream.end(req.file.buffer);
+
+  try {
+    if (!req.file) throw new Error("No file uploaded");
+
+    function cloudnairyUpload(buffer) {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "test" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          },
+        );
+
+        stream.end(buffer);
+      });
+    }
+    const result = await cloudnairyUpload(req.file.buffer);
+    res.json({ message: "upload sucess" });
+
+    url = result.secure_url;
+    public_id = result.public_id;
+
+    console.log(url, public_id);
+
+    await db.query(
+      `UPDATE users
+SET profile_pic_url = $1
+WHERE id = $2; `,
+      [url, id],
+    );
+
+    console.log("Done");
+  } catch (err) {
+    console.error("Upload error:", err);
+    return res.status(500).json({ error: err.message });
+  }
 });

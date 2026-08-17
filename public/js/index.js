@@ -40,9 +40,10 @@ async function LoadMemberList(userId) {
 
   data.forEach((el) => {
     if (el.userId !== id) {
+      console.log(el.url);
       a += `<div class="p" data-userid="${el.userId}">
                 <div class="p-pic">
-                  <img src="./assest/p1.jpeg" alt="" />
+                  <img src="${el.url}" alt="" />
                 </div>
                 <div class="p-name">${el.first_name} ${el.last_name} <div class="status-${el.status}"></div> </div>
                 <div class="p-status">
@@ -82,8 +83,6 @@ async function updateUnreadCounts(userId) {
         if (el.unread_count > 0) {
           member.querySelector(".unread").style.display = "block";
           member.querySelector(".unread").textContent = el.unread_count;
-        } else {
-          member.querySelector(".unread").style.display = "none";
         }
       }
     });
@@ -431,42 +430,65 @@ async function fetchChat(userId, receiverId) {
   });
 }
 
-// document.querySelector(".js-upload-btn").addEventListener("click", async () => {
-//   const img = document.querySelector(".js-upload-img");
-//   const input_files = document.querySelector(".js-upload");
-//   const titleInput = document.getElementById("titleInput");
-//   let file = input_files.files[0];
-//   if (!file) return alert("File is required");
-//   const title = titleInput.value;
-//   const path = URL.createObjectURL(file);
-//   const maxSize = 5 * 1024 * 1024;
+document.querySelector(".js-upload").addEventListener("change", showImage);
 
-//   if (!file.type.startsWith("image/"))
-//     return alert("Only image files are allowed");
-//   if (file.size > maxSize) return alert("File is too large. Max size is 5MB");
+function showImage() {
+  const img = document.querySelector(".js-upload-img");
+  const input_files = document.querySelector(".js-upload");
 
-//   img.src = path;
-//   img.onload = () => URL.revokeObjectURL(path);
+  let file = input_files.files[0];
+  if (!file) return;
 
-//   const formData = new FormData();
-//   formData.append("file", file);
+  const maxSize = 5 * 1024 * 1024;
 
-//   formData.append("title", title);
+  if (!file.type.startsWith("image/"))
+    return alert("Only image files are allowed");
+  if (file.size > maxSize) return alert("File is too large. Max size is 5MB");
 
-//   try {
-//     const res = await fetch("/imagePost", {
-//       method: "POST",
-//       body: formData,
-//       credentials: "include",
-//     });
-//     if (!res.ok) {
-//       throw new Error(`Upload failed with status ${res.status}`);
-//     }
-//     input_files.value = "";
-//     img.src = "";
-//     const result = await res.json();
-//     console.log(result);
-//   } catch (err) {
-//     console.error("Error uploading image: ", err);
-//   }
-// });
+  const path = URL.createObjectURL(file);
+
+  img.src = path;
+  img.onload = () => URL.revokeObjectURL(path);
+}
+
+document.querySelector(".js-upload-btn").addEventListener("click", async () => {
+  const img = document.querySelector(".js-upload-img");
+  const input_files = document.querySelector(".js-upload");
+
+  let file = input_files.files[0];
+  if (!file) return alert("File is required");
+
+  const maxSize = 5 * 1024 * 1024;
+
+  if (!file.type.startsWith("image/"))
+    return alert("Only image files are allowed");
+  if (file.size > maxSize) return alert("File is too large. Max size is 5MB");
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("id", userID);
+
+  try {
+    const res = await fetch("/image", {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      throw new Error(`Upload failed with status ${res.status}`);
+    }
+    input_files.value = "";
+    img.src = "";
+    const result = await res.json();
+    console.log(result);
+  } catch (err) {
+    console.error("Error uploading image: ", err);
+  }
+});
+
+document.querySelector(".close").addEventListener("click", () => {
+  document.querySelector(".model-edit").style.display = "none";
+});
+
+document.querySelector(".p-edit").addEventListener("click", () => {
+  document.querySelector(".model-edit").style.display = "flex";
+});
