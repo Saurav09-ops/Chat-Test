@@ -10,6 +10,23 @@ let userID;
 let ws = null;
 let receiverId = null;
 
+async function sideNav(id) {
+  let pId = id;
+  console.log("exectuiting");
+  let result = await fetch(`/Profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id: pId }),
+  });
+  let value = await result.json();
+  console.log(value);
+  document.querySelector(".p-pic").src = value.data[0].url;
+  document.querySelector(".profile-name").innerText =
+    `${value.data[0].first_name} ${value.data[0].last_name}`;
+}
+
 document.querySelector(".chat-content").style.height =
   `${document.querySelector(".chat").clientHeight - document.querySelector(".chat-util").offsetHeight}px`;
 
@@ -290,6 +307,7 @@ async function verification(email) {
         console.log(result);
         console.log("Verification successful");
         LoadMemberList(data.userId);
+        sideNav(data.userId);
       }
     });
   } else {
@@ -480,6 +498,7 @@ document.querySelector(".js-upload-btn").addEventListener("click", async () => {
     img.src = "";
     const result = await res.json();
     console.log(result);
+    await sideNav(userID);
   } catch (err) {
     console.error("Error uploading image: ", err);
   }

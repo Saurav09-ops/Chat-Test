@@ -341,3 +341,31 @@ WHERE id = $2; `,
     return res.status(500).json({ error: err.message });
   }
 });
+
+app.post("/Profile", async (req, res) => {
+  console.log("here");
+  let id = req.body.id;
+  console.log(id);
+  try {
+    let status = [];
+    let result = await db.query(
+      "SELECT * from users WHERE id= $1 ORDER BY id ASC",
+      [id],
+    );
+    let post = result.rows[0];
+    // console.log(wsClients);
+    console.log(post);
+
+    status.push({
+      userId: post.id,
+      first_name: post.first_name,
+      last_name: post.last_name,
+      email: post.email,
+      url: post.profile_pic_url,
+    });
+
+    res.status(200).json({ data: status });
+  } catch (er) {
+    console.log(er);
+  }
+});

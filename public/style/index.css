@@ -457,6 +457,7 @@ ul {
 }
 
 .s-profile {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -470,17 +471,17 @@ ul {
 }
 
 .s-profile .profile-pic {
-  position: relative;
   inline-size: 150px;
   aspect-ratio: 1;
   border-radius: 100vw;
   background-color: white;
+  overflow: hidden;
 }
 
 .p-edit {
   position: absolute;
-  bottom: 0;
-  right: 15px;
+  bottom: 45px;
+  right: 20px;
   inline-size: 30px;
   aspect-ratio: 1;
   border-radius: 100vw;
@@ -516,4 +517,10 @@ ul {
 
 .menu li i {
   color: var(--primary-color);
+}
+
+.p-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
