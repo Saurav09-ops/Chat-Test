@@ -21,7 +21,7 @@ async function sideNav(id) {
     body: JSON.stringify({ id: pId }),
   });
   let value = await result.json();
-  console.log(value);
+  // console.log(value);
   document.querySelector(".p-pic").src = value.data[0].url;
   document.querySelector(".profile-name").innerText =
     `${value.data[0].first_name} ${value.data[0].last_name}`;
@@ -51,13 +51,12 @@ async function LoadMemberList(userId) {
   let value = await result.json();
 
   let data = value.data;
-  console.log(data);
+  // console.log(data);
 
   let a = "";
 
   data.forEach((el) => {
     if (el.userId !== id) {
-      console.log(el.url);
       a += `<div class="p" data-userid="${el.userId}">
                 <div class="p-pic">
                   <img src="${el.url}" alt="" />
@@ -89,7 +88,7 @@ async function updateUnreadCounts(userId) {
   });
   let unread = await response.json();
   let unreadData = unread.data;
-  console.log(unreadData);
+  // console.log(unreadData);
 
   if (unreadData.length !== 0) {
     unreadData.forEach((el) => {
@@ -206,9 +205,7 @@ async function refreshChat(data, receiverId, userID) {
       let msgUser = ` <div>
                   <div class="c-user flex">
                     <div class="c-user-text">${data.msg}</div>
-                    <div class="c-pic">
-                      <img src="./assest/p2.jpg" alt="" />
-                   </div>
+                    
                   </div>
                 </div>
                 `;
@@ -216,9 +213,7 @@ async function refreshChat(data, receiverId, userID) {
     } else if (data.senderId !== userID) {
       let msgNonUser = `<div class="bubble">
                   <div class="c-nonuser flex">
-                    <div class="c-pic">
-                      <img src="./assest/p1.jpeg" alt="" />
-                    </div>
+                    
                     <div class="c-user-text">${data.msg}</div>
                   </div>
                 </div>`;
@@ -427,9 +422,7 @@ async function fetchChat(userId, receiverId) {
       msgUser = ` <div>
                   <div class="c-user flex">
                     <div class="c-user-text">${data.content}</div>
-                    <div class="c-pic">
-                      <img src="./assest/p2.jpg" alt="" />
-                   </div>
+                    
                   </div>
                 </div>
                 `;
@@ -437,9 +430,7 @@ async function fetchChat(userId, receiverId) {
     } else if (data.sender_id !== userID) {
       msgNonUser = `<div class="bubble">
                   <div class="c-nonuser flex">
-                    <div class="c-pic">
-                      <img src="./assest/p1.jpeg" alt="" />
-                    </div>
+                    
                     <div class="c-user-text">${data.content}</div>
                   </div>
                 </div>`;
